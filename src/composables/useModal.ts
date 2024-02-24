@@ -1,9 +1,14 @@
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 
-const useModal = () => {
+interface useModalProps {
+  showModal: Ref<boolean>
+  toggleModalState: () => void
+}
+
+const useModal = (): useModalProps => {
   const showModal = ref<boolean>(false)
 
-  const toggleModalState = () => {
+  const toggleModalState = (): void => {
     showModal.value = !showModal.value
   }
 

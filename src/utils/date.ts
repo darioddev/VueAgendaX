@@ -1,4 +1,4 @@
-import type { dataDate } from '../interfaces/calendar'
+//import type { dataDate } from '../interfaces/calendar'
 import { transformArrayStringToNumber } from './arrayString'
 
 export const transformDateToDateInfo = (date: Date): string =>
@@ -35,7 +35,8 @@ export const getDateTimeFormat = (
 export const getTimeFormat = (
   hour: number,
   minute: number = import.meta.env.VITE_MINUTES_END_DEFAULT
-): string => `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+): string =>
+  `${(hour > 23 ? '00' : hour).toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
 
 export const checkDate = (value: string): string | null => {
   const dte: number = new Date(value).getFullYear() || 0
@@ -47,9 +48,10 @@ export const checkDate = (value: string): string | null => {
   }
   return value
 }
-
+/*
 export const getDateObject = (date: Date): dataDate => {
   const dte: string = getFormatDateParam(date)
   const [year, month, day] = dte.split('-').map((d) => Number(d))
   return { date: dte, day: day, month: month, year: year }
 }
+*/

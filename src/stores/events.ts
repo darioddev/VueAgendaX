@@ -1,19 +1,22 @@
-import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { TaskModelProps } from '@/interfaces/calendar'
+import { reactive, ref } from 'vue'
+import type { TaskModelProps } from '@/interfaces/taskModelProps'
 
-export const useEventsStore = defineStore('events', () => {
-  const events = ref<TaskModelProps[]>([])
+const useEventsStore = defineStore('events', () => {
+  const events = reactive<TaskModelProps[]>([])
+
   return {
     events,
-    filterForDate(dte: Date): TaskModelProps[] {
-      return this.events.value.filter((event) => event.date === dte)
+    filterForDate(dte: string): Array<TaskModelProps> {
+      return events.filter((event) => event.date === dte)
     },
-    filterForType(tpe: string): TaskModelProps[] {
-      return this.events.value.filter((event) => event.type === tpe)
+    getEventsByType(tpe: string): Array<TaskModelProps> {
+      return events.filter((event) => event.type === tpe)
     },
-    setEvents(newClients: TaskModelProps[] | any ): void {
-      events.value = newClients
+    setEvents(newEvents: Array<TaskModelProps>): void {
+      events.splice(0, events.length, ...newEvents)
     }
   }
 })
+
+export default useEventsStore

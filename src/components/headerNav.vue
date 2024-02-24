@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { useRouter } from 'vue-router'
-import { computed, ref , onMounted } from 'vue'
 const route = useRouter() // Creamos una constante para manejar las rutas
 
 const fullName: string = import.meta.env.VITE_FULL_NAME as string // Importamos el nombre completo de la aplicación desde el archivo .env

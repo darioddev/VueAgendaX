@@ -1,33 +1,105 @@
 <script setup lang="ts">
-import type { TaskModelProps, taskModalProps } from '@/interfaces/calendar'
+import useMutationEvent from '@/composables/useMutate'
+
+import type { TaskModelProps } from '@/interfaces/taskModelProps'
+import type { taskModalProps } from '@/interfaces/taskModalProps'
 import { TaskType } from '@/interfaces/types'
 import { ref, watch, nextTick } from 'vue'
-//import { postEvent } from '@/composables/useEvent'
-import { useAddEvent } from '@/composables/useEvent'
-//import { hasEmptyDataObject } from '@/utils/arrayString'
 import { getTimeFormat, getFormatDateParam, transformDateToDateInfo, checkDate } from '@/utils/date'
 import { generateUUID, generateColor } from '@/utils/uuid'
-
-//import { post } from '@/utils/request'
+import { postEvent, patchEvent, removeEvent } from '@/utils/request'
 
 const props = withDefaults(defineProps<taskModalProps>(), {
-    showModal: false
+    showModal: false,
+    date: () => new Date(),
 })
+
 const showModal = ref<boolean>(props.showModal)
 const errorMessage = ref<string>('')
 const inputTitleEvent = ref<HTMLInputElement | null>(null)
+
 const {
-    isSuccess: isSuccessMutation,
-    mutateAsync: pushEvent
-} = useAddEvent()
+    isSuccess: isSuccessMutation, // estado de la mutacion , si es verdadero , la mutacion fue exitosa entonces muestro un mensaje de guardado
+    reset, // resetea el estado de la mutacion , para que pueda ser usada nuevamente , y no se muestre el mensaje de guardado
+    mutateAsync // funcion que ejecuta la mutacion
+} = useMutationEvent() // Mutacion para enviar los datos al servidor
+
 
 const emit = defineEmits(['update:showModal'])
 const closeModal = () => emit('update:showModal', !showModal.value)
 const task = ref<TaskModelProps>(
-    props.task ?? {
+    {
         type: TaskType.EVENTO,
         title: '',
-        date: props.date,
+        date: props.date.toLocaleDateString(),
+        star: {
+            date: getFormatDateParam(props.date),
+            time: getTimeFormat(new Date().getHours() + 1),
+            allDay: false
+        },
+        end: {
+            date: getFormatDateParam(props.date),
+            time: getTimeFormat(new Date().getHours() + 2) || '00:00'
+        },
+        color: {
+            background: generateColor(),
+            text: '#000000'
+        },
+        description: ''
+    })
+
+const focusEvent = (typeEvent: string) => task.value.type.toLowerCase() === typeEvent.toLowerCase() ? 'bg-gray-200' : ''
+
+
+const handleSubmitEvents = async () => {
+    try {
+        /*
+        //Excepcion general para evitar enviar datos vacios
+        if (hasEmptyDataObject(task.value)) throw new Error('No se puede enviar datos vacios')
+        */
+        if (!task.value.title.trim()) {
+            //throw new Error('El titulo no puede estar vacio')
+            task.value.title = '(Sin titulo)'
+        }
+        if (!task.value.id) await mutateAsync(() => postEvent({
+            ...task.value,
+            uid: generateUUID()
+        }))
+
+        if (task.value.id) {
+            if (confirm('¿Estas seguro de actualizar este evento?')) {
+                await mutateAsync(() => patchEvent({
+                    ...task.value,
+                    dateModified: new Date().toISOString()
+                }))
+            }
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000)) //Simulo un tiempo de espera , para que el usuario vea el mensaje de guardado
+        reset() // Reseteo el estado de la mutacion
+        closeModal()
+    } catch (error) {
+        if (error instanceof Error) errorMessage.value = error.message
+        else errorMessage.value = 'Algo salio mal'
+    }
+}
+
+const handleRemoveEvent = async () => {
+    try {
+        if (confirm('¿Estas seguro de eliminar este evento?')) {
+            await mutateAsync(() => removeEvent(task.value?.id as number))
+            closeModal()
+        }
+    } catch (error) {
+        if (error instanceof Error) errorMessage.value = error.message
+        else errorMessage.value = 'Algo salio mal'
+    }
+}
+
+const resetValues = (): void => {
+    task.value = {
+        type: TaskType.EVENTO,
+        title: '',
+        date: props.date.toLocaleDateString(),
         star: {
             date: getFormatDateParam(props.date),
             time: getTimeFormat(new Date().getHours() + 1),
@@ -42,81 +114,69 @@ const task = ref<TaskModelProps>(
             text: '#000000'
         },
         description: ''
-    })
+    }
+}
 
 watch(() => task.value.star.date, (value) => {
-    task.value.star.date = checkDate(value) || getFormatDateParam(props.date)
-})
+    task.value = {
+        ...task.value,
+        date: new Date(value).toLocaleDateString(),
+        star: {
+            ...task.value.star,
+            date: checkDate(value) || getFormatDateParam(props.date)
+        },
+        end: {
+            ...task.value.end,
+            date: checkDate(value) || getFormatDateParam(props.date)
+        }
+    };
+});
 
-watch(() => task.value.end.date, (value) => task.value.end.date = checkDate(value) || getFormatDateParam(props.date))
-watch(() => props.showModal, async (value) => {
+
+watch(() => task.value.end.date, (value) => {
+    task.value = {
+        ...task.value,
+        end: {
+            ...task.value.end,
+            date: checkDate(value) || getFormatDateParam(props.date)
+        }
+    };
+});
+
+watch(() => props.date, (value: Date) => {
+    const dateValue = value instanceof Date ? value : new Date(value)
+    const formattedDate = dateValue.toLocaleDateString()
+    task.value = {
+        ...task.value,
+        date: formattedDate,
+        star: {
+            ...task.value.star,
+            date: getFormatDateParam(dateValue)
+        },
+        end: {
+            ...task.value.end,
+            date: getFormatDateParam(dateValue)
+        }
+    };
+});
+
+
+watch(() => props.task, (value: TaskModelProps | undefined) => {
+    if (value) {
+        task.value = JSON.parse(JSON.stringify(value))
+    }
+}, { immediate: true, })
+
+watch(() => props.showModal, async (value: boolean) => {
     showModal.value = value // Actualizo el valor de la variable reactiva showModal con el valor de la prop showModal
     if (value) { // Si es verdadero , el modal se muestra
         await nextTick(); // Espera a que el DOM se actualice para enfocar el input
         inputTitleEvent.value?.focus(); // Enfoco el input
     }
-    if (!task.value?.uid) resetValues() // Si no hay un uid, reseteo los valores
-
+    // Si no hay un id, reseteo los valores , esto es por que el id nos la proporciona el servidor , y si no hay id es por que es un nuevo evento
+    if (!task.value?.id) resetValues()
 })
-
-
-watch(() => props.date, (value) => {
-    task.value.date = value
-    task.value.star.date = getFormatDateParam(value)
-    task.value.end.date = getFormatDateParam(value)
-},)
-
-
-const focusEvent = (typeEvent: string) => task.value.type.toLowerCase() === typeEvent.toLowerCase() ? 'bg-gray-200' : ''
-
-
-const handleSubmitEvents = async () => {
-    try {
-        /*
-        //Excepcion general para evitar enviar datos vacios
-        if (hasEmptyDataObject(task.value)) throw new Error('No se puede enviar datos vacios')
-        */
-        if (!task.value.title.trim()) throw new Error('El titulo no puede estar vacio')
-        const data: TaskModelProps = { uid: generateUUID(), ...task.value }
-        //await post(import.meta.env.VITE_API_URL_EVENTOS as string, data)
-        //await postEvent(data)
-        await pushEvent(data)
-        await new Promise((resolve) => setTimeout(resolve, 1000)) //Simulo un tiempo de espera
-        closeModal()
-    } catch (error) {
-        if (error instanceof Error) errorMessage.value = error.message
-        else errorMessage.value = 'Algo ha salido mal'
-    }
-}
-
-const resetValues = () => {
-    errorMessage.value = ''
-    task.value = {
-        type: TaskType.EVENTO,
-        title: '',
-        date: props.date,
-        star: {
-            date: getFormatDateParam(props.date),
-            time: getTimeFormat(new Date().getHours() + 1),
-            allDay: false
-        },
-        end: {
-            date: getFormatDateParam(props.date),
-            time: getTimeFormat(new Date().getHours() + 2)
-        },
-        color: {
-            background: generateColor(),
-            text: (task.value.color.background === '#000000') ? '#FFFFFF' : '#000000'
-        },
-        description: ''
-    }
-}
-
-
 </script>
-
-
-
 <template>
     <div id="crud-modal" tabindex="-1" aria-hidden="true"
         class="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
@@ -152,6 +212,10 @@ const resetValues = () => {
                                 class="bg-gray-50  text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 placeholder="Añade un titulo para el evento" title="Añade un titulo para el evento"
                                 v-model="task.title">
+                            <p class="text-xs text-gray-400 text-start ml-1" v-if="task.dateModified">Ultima modificacion:
+                                {{ transformDateToDateInfo(new Date(task.dateModified)) }}
+                                {{ new Date(task.dateModified).toLocaleTimeString() }}
+                            </p>
                         </div>
                         <div class="col-span-2">
                             <div class="flex items-start justify-start gap-1" title="Tipo de evento">
@@ -257,21 +321,18 @@ const resetValues = () => {
                     </div>
                     <div class="text-end">
                         <button type="submit"
-                            class="bg-blue-500 text-white text-sm font-medium rounded-lg px-3 py-1 hover:bg-blue-700 transition duration-300 ease-in-out"
-                            :title="`Guardar evento para el dia ${transformDateToDateInfo(new Date(task.date))}`
-                                ">
-                            <i class='bx bxs-save'></i>
+                            class="text-white text-sm font-medium rounded-lg px-3 py-1 hover:bg-blue-700 transition duration-300 ease-in-out"
+                            :class="{
+                                'bg-blue-500': !task.id,
+                                'bg-green-700': task.id,
+                                'mx-1': task.id
+                            }"
+                            :title="task.id ? 'Guardar cambios' : `Guardar evento para el dia ${transformDateToDateInfo(new Date(task.date))}`">
+                            <i :class="task.id ? 'bx bx-rename' : 'bx bxs-save'"></i>
                         </button>
-                        <button type="button"
-                            v-if="task.uid"
-                            class="bg-green-700 text-white text-sm font-medium rounded-lg px-3 py-1 mx-1 hover:bg-green-800 transition duration-300 ease-in-out"
-                            @click="closeModal" title="Guardar cambios">
-                            <i class='bx bx-rename'></i>
-                        </button>
-                        <button type="button"
-                            v-if="task.uid"
+                        <button type="button" v-if="task.id"
                             class="bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-1 hover:bg-red-700 transition duration-300 ease-in-out"
-                            @click="closeModal" title="Borrar evento">
+                            @click="handleRemoveEvent" title="Borrar evento">
                             <i class='bx bxs-trash'></i>
                         </button>
                     </div>

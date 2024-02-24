@@ -3,10 +3,11 @@ export interface TaskModelProps {
   uid?: string
   title: string
   type: string
-  date: Date
+  date: string
   star: dayTime
   end: dayTime
   color: colors
+  dateModified?: string
   description?: string
 }
 

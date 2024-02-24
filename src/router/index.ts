@@ -7,7 +7,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       meta : { title: 'Home' },
-      component: () => import('@/views/CalendarView.vue')
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path: '/calendario',
@@ -20,6 +20,12 @@ const router = createRouter({
       name: 'tasks',
       meta : { title: 'Eventos' },
       component: () => import('@/views/TaskView.vue')      
+    },
+    {
+      path: '/day/:id',
+      name: 'day',
+      meta: { title: 'Dia' },
+      component: () => import('@/views/DayView.vue')
     }
   ]
 })

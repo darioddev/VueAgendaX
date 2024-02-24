@@ -1,53 +1,48 @@
 import axios from 'axios'
-import type { TaskModelProps } from '@/interfaces/calendar'
+import app from '@/api/api'
+import type { TaskModelProps } from '@/interfaces/taskModelProps'
 
 //Peticion get con axios
-export const get = async (url: string) : Promise<TaskModelProps | null> => {
+export const getEvents = async (): Promise<TaskModelProps> => {
   try {
-    const response = await axios.get(url)
+    const response = await app.get('/eventos')
     return response.data
   } catch (error) {
-    return null
+    throw new Error('Hubo un error al obtener los eventos , intentelo de nuevo')
   }
 }
 
-//Peticion post con axios
-export const post = async (url: string, data: object): Promise<TaskModelProps | Error> => {
+export const postEvent = async (event: TaskModelProps): Promise<void> => {
   try {
-    const response = await axios.post(url, data)
+    await app.post('/eventos', event)
+  } catch (error) {
+    throw new Error('Hubo un error al crear el evento , intentelo de nuevo')
+  }
+}
+
+export const removeEvent = async (id: number): Promise<void> => {
+  try {
+    await app.delete(`/eventos/${id}`)
+  } catch (error) {
+    throw new Error('No se ha podido eliminar el evento , intentelo de nuevo')
+  }
+}
+
+export const patchEvent = async (data: TaskModelProps): Promise<TaskModelProps> => {
+  try {
+    const response = await app.patch(`/eventos/${data?.id}`, data)
+    return response.data
+  } catch (error) {
+    throw new Error('No se ha podido actualizar el evento , intentelo de nuevo')
+  }
+}
+
+//Peticion put con axios
+export const put = async (url: string, data: object): Promise<TaskModelProps | null> => {
+  try {
+    const response = await axios.put(url, data)
     return response.data
   } catch (error) {
     throw new Error('Algo ha ido mal , por favor intentelo de nuevo ')
   }
 }
-
-//Peticion put con axios
-export const put = async (url: string, data: object) : Promise<TaskModelProps | null> => {
-  try {
-    const response = await axios.put(url, data)
-    return response.data
-  } catch (error) {
-    return null
-  }
-}
-
-//Peticion delete con axios
-export const remove = async (url: string) : Promise<TaskModelProps | null> => {
-  try {
-    const response = await axios.delete(url)
-    return response.data
-  } catch (error) {
-    return null
-  }
-}
-
-//Peticion patch con axios
-export const patch = async (url: string, data: object) : Promise<TaskModelProps | null> => {
-  try {
-    const response = await axios.patch(url, data)
-    return response.data
-  } catch (error) {
-    return null
-  }
-}
-
