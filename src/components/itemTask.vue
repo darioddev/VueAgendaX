@@ -13,7 +13,6 @@ const transerIDForDrag = (event: DragEvent) => {
         event.dataTransfer?.setData('text/plain', props.task.id.toString() as string)
     }
 }
-
 </script>
 
 <template>

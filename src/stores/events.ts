@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import type { TaskModelProps } from '@/interfaces/taskModelProps'
 
 const useEventsStore = defineStore('events', () => {

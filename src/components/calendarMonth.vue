@@ -3,18 +3,18 @@ import ceillCalendar from '@/components/ceillCalendar.vue'
 import useEvents from '@/composables/useEvents'
 import useModal from '@/composables/useModal'
 import taskModal from '@/components/taskModal.vue'
+import useEventAction from '@/composables/useEventAction'
+
 import type { CalendarProps } from '@/interfaces/calendarProps'
 import { transformDateToDateInfo, transformStringToDate } from '@/utils/date'
 import { createArray, transformArrayStringToNumber, capitalize } from '@/utils/arrayString'
-import { removeEvent } from '@/utils/request'
-import useMutationEvent from '@/composables/useMutate'
 
 import { useRouter } from 'vue-router';
 import { ref, watchEffect } from 'vue'
 
-const { mutateAsync } = useMutationEvent()
 const { isLoading, isError } = useEvents()
 const { showModal, toggleModalState } = useModal()
+const { deleteEvent: handleRemoveEvent } = useEventAction()
 
 const props = withDefaults(defineProps<CalendarProps>(), {
     daysOfWeek: () => import.meta.env.VITE_DAYS_OF_WEEK_DEFAULT.split(',') as Array<string>,
@@ -53,12 +53,6 @@ const nextMonth = (n: number): Date => date.value = new Date(date.value.getFullY
 const dayToday = (): Date => date.value = new Date()
 const focusDayToday = (day: string): string => day === new Date().toLocaleDateString() ? 'bg-blue-200' : ''
 
-const handleRemoveEvent = async (event: DragEvent) => {
-    const id: number = Number(event.dataTransfer?.getData('text/plain'))
-    if (confirm('¿Desea eliminar la tarea?')) {
-        mutateAsync(() => removeEvent(id))
-    }
-}
 
 </script>
 
@@ -98,27 +92,25 @@ const handleRemoveEvent = async (event: DragEvent) => {
                     :title="`Mes siguiente: ${capitalize(new Date(date.getFullYear(), date.getMonth() + 1).toLocaleString('es-ES', { month: 'long' }))} de ${new Date(date.getFullYear(), date.getMonth() + 1).getFullYear()}`">
                     <i class='bx bxs-chevron-right'></i>
                 </button>
-                <h3 class="text-4xl font-bold pb-1 text-blue-700 cursor-pointer">{{ capitalize(date.toLocaleString('es-ES', {
-                    month:
-                        'long'
-                })) }}
+                <h3 class="text-4xl font-bold pb-1 text-blue-700 cursor-pointer">{{ capitalize(date.toLocaleString('es-ES',
+                    {
+                        month:
+                            'long'
+                    })) }}
                     de {{ date.getFullYear() }}</h3>
             </div>
             <div class="flex items-center">
                 <div class="flex flex-row ml-auto">
                     <button
                         class="bg-blue-500 px-2 mr-1 rounded-full text-black shadow-md hover:bg-blue-700 transition duration-300 ease-in-out hover:text-white"
-                        title="Agregar tarea"
-                        @click="toggleModalState"
-                        >
+                        title="Agregar tarea" @click="toggleModalState">
                         <i class='bx bxs-calendar-plus bx-sm'></i>
                     </button>
                     <button
                         class="bg-red-300 px-2  mr-1 rounded-full py-1 text-black shadow-md hover:bg-red-600 transition duration-300 ease-in-out hover:text-white transform hover:-translate-y-1"
                         title="Papelera de reciclaje" 
-                        @dragover="$event.preventDefault()"
-                        @drop="handleRemoveEvent"
-                        >
+                        @dragover.prevent
+                        @drop.prevent="handleRemoveEvent(Number($event.dataTransfer?.getData('text/plain')))">
                         <i class='bx bxs-trash bx-flip-horizontal bx-sm'></i>
                     </button>
 
@@ -142,7 +134,6 @@ const handleRemoveEvent = async (event: DragEvent) => {
                         <th></th>
                         <td v-for="(c, j) in daysOfWeek" :key="c"
                             class="text-center border border-gray-400 border-t-0 text-black cursor-pointer hover:bg-blue-200 transition duration-300 ease-in-out"
-                            :title="`Ver eventos del dia ${transformStringToDate(tablamonth[i - 1][j] || '')}`"
                             :class="focusDayToday(tablamonth[i - 1][j])">
                             <ceillCalendar v-if="tablamonth[i - 1][j]" :fecha="tablamonth[i - 1][j]" />
                         </td>
@@ -151,8 +142,7 @@ const handleRemoveEvent = async (event: DragEvent) => {
             </table>
         </div>
     </div>
-    <taskModal :showModal="showModal" @update:showModal="toggleModalState" />
-
+    <taskModal :showModal="showModal" :date="new Date()" @update:showModal="toggleModalState" />
 </template>
 
 

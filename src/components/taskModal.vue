@@ -1,28 +1,23 @@
 <script setup lang="ts">
-import useMutationEvent from '@/composables/useMutate'
+import useEventAction from '@/composables/useEventAction'
 
 import type { TaskModelProps } from '@/interfaces/taskModelProps'
 import type { taskModalProps } from '@/interfaces/taskModalProps'
 import { TaskType } from '@/interfaces/types'
 import { ref, watch, nextTick } from 'vue'
 import { getTimeFormat, getFormatDateParam, transformDateToDateInfo, checkDate } from '@/utils/date'
-import { generateUUID, generateColor } from '@/utils/uuid'
-import { postEvent, patchEvent, removeEvent } from '@/utils/request'
+import { generateColor } from '@/utils/uuid'
 
-const props = withDefaults(defineProps<taskModalProps>(), {
-    showModal: false,
-    date: () => new Date(),
-})
-
+const props = defineProps<taskModalProps>()
 const showModal = ref<boolean>(props.showModal)
-const errorMessage = ref<string>('')
 const inputTitleEvent = ref<HTMLInputElement | null>(null)
 
 const {
-    isSuccess: isSuccessMutation, // estado de la mutacion , si es verdadero , la mutacion fue exitosa entonces muestro un mensaje de guardado
-    reset, // resetea el estado de la mutacion , para que pueda ser usada nuevamente , y no se muestre el mensaje de guardado
-    mutateAsync // funcion que ejecuta la mutacion
-} = useMutationEvent() // Mutacion para enviar los datos al servidor
+    errorMessage, // Mensaje de error
+    submitEvent: handleSubmitEvents, // Funcion para enviar los datos al servidor
+    isSuccessMutation,
+    deleteEvent: handleRemoveEvent
+} = useEventAction() // Acciones para enviar los datos al servidor
 
 
 const emit = defineEmits(['update:showModal'])
@@ -49,51 +44,6 @@ const task = ref<TaskModelProps>(
     })
 
 const focusEvent = (typeEvent: string) => task.value.type.toLowerCase() === typeEvent.toLowerCase() ? 'bg-gray-200' : ''
-
-
-const handleSubmitEvents = async () => {
-    try {
-        /*
-        //Excepcion general para evitar enviar datos vacios
-        if (hasEmptyDataObject(task.value)) throw new Error('No se puede enviar datos vacios')
-        */
-        if (!task.value.title.trim()) {
-            //throw new Error('El titulo no puede estar vacio')
-            task.value.title = '(Sin titulo)'
-        }
-        if (!task.value.id) await mutateAsync(() => postEvent({
-            ...task.value,
-            uid: generateUUID()
-        }))
-
-        if (task.value.id) {
-            if (confirm('¿Estas seguro de actualizar este evento?')) {
-                await mutateAsync(() => patchEvent({
-                    ...task.value,
-                    dateModified: new Date().toISOString()
-                }))
-            }
-        }
-        await new Promise((resolve) => setTimeout(resolve, 1000)) //Simulo un tiempo de espera , para que el usuario vea el mensaje de guardado
-        reset() // Reseteo el estado de la mutacion
-        closeModal()
-    } catch (error) {
-        if (error instanceof Error) errorMessage.value = error.message
-        else errorMessage.value = 'Algo salio mal'
-    }
-}
-
-const handleRemoveEvent = async () => {
-    try {
-        if (confirm('¿Estas seguro de eliminar este evento?')) {
-            await mutateAsync(() => removeEvent(task.value?.id as number))
-            closeModal()
-        }
-    } catch (error) {
-        if (error instanceof Error) errorMessage.value = error.message
-        else errorMessage.value = 'Algo salio mal'
-    }
-}
 
 const resetValues = (): void => {
     task.value = {
@@ -195,7 +145,7 @@ watch(() => props.showModal, async (value: boolean) => {
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-                <form class="p-4 md:p-5" @submit.prevent="handleSubmitEvents">
+                <form class="p-4 md:p-5" @submit.prevent="handleSubmitEvents(task, closeModal)">
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2 flex items-center justify-center" v-if="errorMessage.trim()">
                             <i class='bx bxs-error text-red-600 mx-1'></i>
@@ -332,7 +282,7 @@ watch(() => props.showModal, async (value: boolean) => {
                         </button>
                         <button type="button" v-if="task.id"
                             class="bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-1 hover:bg-red-700 transition duration-300 ease-in-out"
-                            @click="handleRemoveEvent" title="Borrar evento">
+                            @click="handleRemoveEvent( task?.id as number, closeModal)" title="Borrar evento">
                             <i class='bx bxs-trash'></i>
                         </button>
                     </div>

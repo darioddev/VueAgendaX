@@ -86,133 +86,45 @@
     },
     {
       "type": "Evento",
-      "title": "sinmas",
-      "date": "29/2/2024",
+      "title": "alexander",
+      "date": "28/2/2024",
       "star": {
-        "date": "2024-02-29",
-        "time": "22:30",
+        "date": "2024-02-28",
+        "time": "17:30",
         "allDay": false
       },
       "end": {
-        "date": "2024-02-29",
-        "time": "23:30"
+        "date": "2024-02-28",
+        "time": "18:30"
       },
       "color": {
-        "background": "#69cae6",
+        "background": "#9b5a6c",
         "text": "#000000"
       },
       "description": "",
-      "uid": "29fa1e0a0edd4f508e8cd16981c7b3c0",
-      "id": 11
+      "uid": "4541ad82449f4e4a9a6369972c337dd6",
+      "id": 27
     },
     {
       "type": "Evento",
-      "title": "24fe",
-      "date": "7/2/2024",
-      "star": {
-        "date": "2024-02-07",
-        "time": "22:30",
-        "allDay": false
-      },
-      "end": {
-        "date": "2024-02-07",
-        "time": "23:30"
-      },
-      "color": {
-        "background": "#2ae8a9",
-        "text": "#000000"
-      },
-      "description": "",
-      "uid": "fefc4eee944b4de489075f9cb6f1edc0",
-      "id": 14
-    },
-    {
-      "type": "Evento",
-      "title": "(Sin titulo)",
-      "date": "2/2/2024",
-      "star": {
-        "date": "2024-02-02",
-        "time": "00:30",
-        "allDay": false
-      },
-      "end": {
-        "date": "2024-02-02",
-        "time": "00:30"
-      },
-      "color": {
-        "background": "#2570da",
-        "text": "#000000"
-      },
-      "description": "",
-      "uid": "8c360977dc32429298f013682fc6d8ff",
-      "id": 15,
-      "dateModified": "2024-02-24T22:49:22.561Z"
-    },
-    {
-      "type": "Evento",
-      "title": "nuevo",
-      "date": "2/2/2024",
-      "star": {
-        "date": "2024-02-02",
-        "time": "00:30",
-        "allDay": false
-      },
-      "end": {
-        "date": "2024-02-02",
-        "time": "00:30"
-      },
-      "color": {
-        "background": "#812cae",
-        "text": "#000000"
-      },
-      "description": "",
-      "uid": "9cc3c749bb8e4fb4bfb87d2fa1c8b79a",
-      "id": 16,
-      "dateModified": "2024-02-24T23:27:08.989Z"
-    },
-    {
-      "type": "Evento",
-      "title": "d1",
+      "title": "tarea",
       "date": "1/2/2024",
       "star": {
         "date": "2024-02-01",
-        "time": "01:30",
+        "time": "17:30",
         "allDay": false
       },
       "end": {
         "date": "2024-02-01",
-        "time": "02:30"
+        "time": "18:30"
       },
       "color": {
-        "background": "#73dea5",
+        "background": "#a200b9",
         "text": "#000000"
       },
-      "description": "o\n",
-      "uid": "8074ea31ce5144619361d81b6d4d128e",
-      "id": 18,
-      "dateModified": "2024-02-24T23:55:16.790Z"
-    },
-    {
-      "type": "Tarea",
-      "title": "(Sin titulo)",
-      "date": "25/2/2024",
-      "star": {
-        "date": "2024-02-25",
-        "time": "01:30",
-        "allDay": true
-      },
-      "end": {
-        "date": "2024-02-25",
-        "time": "02:30"
-      },
-      "color": {
-        "background": "#445f8a",
-        "text": "#26a269"
-      },
       "description": "",
-      "uid": "411ee1995bb843ceb66c92c01746c775",
-      "id": 19,
-      "dateModified": "2024-02-24T23:22:47.338Z"
+      "uid": "50d0a7fe02864e5d9e6f84622dea4be8",
+      "id": 28
     }
   ]
 }
