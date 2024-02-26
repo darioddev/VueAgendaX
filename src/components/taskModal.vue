@@ -122,10 +122,11 @@ watch(() => props.showModal, async (value: boolean) => {
     if (value) { // Si es verdadero , el modal se muestra
         await nextTick(); // Espera a que el DOM se actualice para enfocar el input
         inputTitleEvent.value?.focus(); // Enfoco el input
-    }
-    // Si no hay un id, reseteo los valores , esto es por que el id nos la proporciona el servidor , y si no hay id es por que es un nuevo evento
+    }    // Si no hay un id, reseteo los valores , esto es por que el id nos la proporciona el servidor , y si no hay id es por que es un nuevo evento
     if (!task.value?.id) resetValues()
+
 })
+
 </script>
 <template>
     <div id="crud-modal" tabindex="-1" aria-hidden="true"

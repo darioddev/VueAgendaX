@@ -2,7 +2,7 @@
   "eventos": [
     {
       "type": "Evento",
-      "title": "ola",
+      "title": "22",
       "date": "1/3/2024",
       "star": {
         "date": "2024-03-01",
@@ -14,16 +14,17 @@
         "time": "16:30"
       },
       "color": {
-        "background": "#cd8f2f",
+        "background": "#63452c",
         "text": "#000000"
       },
       "description": "",
       "uid": "c2d68b8c8448492db85fc77398b6ca6c",
-      "id": 4
+      "id": 4,
+      "dateModified": "2024-02-26T12:08:21.428Z"
     },
     {
       "type": "Evento",
-      "title": "dario",
+      "title": "dario22",
       "date": "29/1/2024",
       "star": {
         "date": "2024-01-29",
@@ -40,7 +41,8 @@
       },
       "description": "",
       "uid": "815cf0aee15846dc851cbef6c6a36f0c",
-      "id": 5
+      "id": 5,
+      "dateModified": "2024-02-26T07:59:31.446Z"
     },
     {
       "type": "Evento",
@@ -65,7 +67,7 @@
     },
     {
       "type": "Evento",
-      "title": "da54",
+      "title": "da55",
       "date": "2/3/2024",
       "star": {
         "date": "2024-03-02",
@@ -82,19 +84,20 @@
       },
       "description": "faadfeqr",
       "uid": "67552aa92d1c4cae9cb8eb471d1c2c2c",
-      "id": 9
+      "id": 9,
+      "dateModified": "2024-02-26T07:59:00.981Z"
     },
     {
       "type": "Evento",
-      "title": "alexander",
-      "date": "28/2/2024",
+      "title": "p4",
+      "date": "16/2/2024",
       "star": {
-        "date": "2024-02-28",
+        "date": "2024-02-16",
         "time": "17:30",
         "allDay": false
       },
       "end": {
-        "date": "2024-02-28",
+        "date": "2024-02-16",
         "time": "18:30"
       },
       "color": {
@@ -103,28 +106,31 @@
       },
       "description": "",
       "uid": "4541ad82449f4e4a9a6369972c337dd6",
-      "id": 27
+      "id": 27,
+      "dateModified": "2024-02-26T19:10:05.869Z"
     },
     {
       "type": "Evento",
-      "title": "tarea",
-      "date": "1/2/2024",
+      "title": "dario",
+      "date": "5/2/2024",
       "star": {
-        "date": "2024-02-01",
-        "time": "17:30",
+        "date": "2024-02-05",
+        "time": "13:30",
         "allDay": false
       },
       "end": {
-        "date": "2024-02-01",
-        "time": "18:30"
+        "date": "2024-02-05",
+        "time": "14:30"
       },
       "color": {
-        "background": "#a200b9",
+        "background": "#9a9996",
         "text": "#000000"
       },
       "description": "",
-      "uid": "50d0a7fe02864e5d9e6f84622dea4be8",
-      "id": 28
+      "dateCreated": "2024-02-26T11:55:16.077Z",
+      "uid": "c5ed5ab3edd64cd98b89f95051bdb74a",
+      "id": 28,
+      "dateModified": "2024-02-26T18:33:11.873Z"
     }
   ]
 }

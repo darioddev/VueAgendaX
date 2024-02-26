@@ -16,7 +16,9 @@ coverage
 
 
 *otrasformas*
-db
+*db*
+*.json*
+
 /cypress/videos/
 /cypress/screenshots/
 

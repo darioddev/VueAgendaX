@@ -14,6 +14,7 @@ const useEventAction = () => {
       await mutateAsync(() =>
         postEvent({
           ...event,
+          dateCreated: new Date().toISOString(),
           uid: generateUUID()
         })
       )
@@ -26,11 +27,7 @@ const useEventAction = () => {
     }
   }
 
-  const updateEvent = async (
-    event: TaskModelProps,
-    close: (() => void) | null = null,
-    message = '¿Estás seguro de que quieres actualizar este evento?'
-  ): Promise<void> => {
+  const updateEvent = async ( event: TaskModelProps, close: (() => void) | null = null, message = '¿Estás seguro de que quieres actualizar este evento?' ): Promise<void> => {
     try {
       if (confirm(message)) {
         await mutateAsync(() =>

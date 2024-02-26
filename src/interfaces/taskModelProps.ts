@@ -7,6 +7,7 @@ export interface TaskModelProps {
   star: dayTime
   end: dayTime
   color: colors
+  dateCreated?: string
   dateModified?: string
   description?: string
 }

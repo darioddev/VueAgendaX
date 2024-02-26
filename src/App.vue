@@ -1,13 +1,22 @@
-
 <script setup lang="ts">
-//Impportar stle.css 
-//import useEvents from '@/composables/useEvents';
-//const { isLoading, events } = useEvents();
+import useEvents from '@/composables/useEvents';
+import loaderComponent from '@/components/loaderComponent.vue';
+import messageError from '@/components/messageError.vue';
+const { isLoading, isError } = useEvents()
 import '@/index.css'
 </script>
+
 <template>
-  <!-- router-view -->
-  <router-view />
+  <router-view v-slot="{ Component }">
+    <Component :is="Component">
+      <template v-slot:error>
+        <messageError :isError="isError" />
+      </template>
+      <template v-slot:loading>
+        <loaderComponent :isLoading="isLoading" />
+      </template>
+    </Component>
+  </router-view>
 </template>
 
 <style></style>

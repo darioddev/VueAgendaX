@@ -4,17 +4,19 @@ import useModal from '@/composables/useModal';
 import itemTask from '@/components/itemTask.vue';
 import useEventsStore from '@/stores/events';
 import useEventAction from '@/composables/useEventAction';
+import { useRouter } from 'vue-router';
 
 import type { TaskModelProps } from '@/interfaces/taskModelProps';
 import { transformStringToDateObject, getFormatDateParam, transformStringToDate } from '@/utils/date'
 import { transformArrayStringToNumber } from '@/utils/arrayString'
 import { ref, watch, onMounted } from 'vue'
-import { patchEvent, } from '@/utils/request';
 import { storeToRefs } from 'pinia';
 
 interface Props {
     fecha: string
 }
+const redirect = useRouter()
+
 const {
     showModal: modalState,
     toggleModalState
@@ -74,9 +76,7 @@ watch(() => props.fecha, (value: string) => {
         <div class="flex flex-col justify-start items-center">
             <p>{{ transformArrayStringToNumber(props.fecha, '/')[0] }}</p>
         </div>
-        <div class="flex flex-col justify-start items-center h-20 " 
-                    @dragover.prevent 
-                    @drop.prevent="updateForDate">
+        <div class="flex flex-col justify-start items-center h-20 " @dragover.prevent @drop.prevent="updateForDate">
             <itemTask v-for="task in tasks" :task="task" :date="(transformStringToDateObject(task.date))" :key="task.uid" />
         </div>
         <div class="
@@ -90,7 +90,9 @@ watch(() => props.fecha, (value: string) => {
             </button>
             <button
                 class="bg-blue-300 px-1 mr-1 rounded-full text-black shadow-md hover:bg-blue-600 transition duration-300 ease-in-out hover:text-white"
-                title="ver tareas y eventos del dia">
+                :title="`Ver eventos y tareas del dia ${transformStringToDate(props.fecha)}`"
+                @click="redirect.push(`/day/${props.fecha.split('/').join('-')}`)"
+                >
                 <i class='bx bxs-calendar-star' @click="toggleModalState"></i>
             </button>
         </div>

@@ -2,6 +2,7 @@
 import taskModal from '@/components/taskModal.vue';
 import useModal from '@/composables/useModal';
 import type { taskModalProps } from '@/interfaces/taskModalProps'
+import { watch } from 'vue'
 const props = defineProps<taskModalProps>()
 const {
     showModal: modalState,
@@ -13,19 +14,18 @@ const transerIDForDrag = (event: DragEvent) => {
         event.dataTransfer?.setData('text/plain', props.task.id.toString() as string)
     }
 }
+
 </script>
 
 <template>
-    <div class="w-full my-1 rounded-lg flex items-center justify-start shadow-md transition duration-300 ease-in-out"
+    <div class="w-full my-1 rounded-lg flex items-center justify-start shadow-md transition duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:scale-105"
         :style="{
             backgroundColor: props.task?.color.background,
             color: props.task?.color.text
-        }" @click="toggleModalState"
-        :draggable="true"
-        @dragstart="transerIDForDrag"
-        >
+        }" @click="toggleModalState" :draggable="true" @dragstart="transerIDForDrag">
         <i class='bx bx-task pl-2'></i>
-        <p class="pl-2 text-sm">{{ props.task?.title }}</p>
+        <p class="pl-2 text-md">{{ props.task?.title }}</p>
+        <slot></slot>
     </div>
     <taskModal :showModal="modalState" :date="props.date" :task="props.task" @update:showModal="toggleModalState" />
 </template>

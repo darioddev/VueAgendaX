@@ -2,43 +2,38 @@
 import headerNav from '@/components/headerNav.vue'
 import itemTask from '@/components/itemTask.vue'
 import useEventsStore from '@/stores/events'
-
 import { transformStringToDateObject } from '@/utils/date'
 import { TaskType } from '@/interfaces/types'
-import { reactive, ref, watch, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { reactive, ref, watchEffect } from 'vue'
 import type { TaskModelProps } from '@/interfaces/taskModelProps'
-
 const task = ref<string>(TaskType.TODOS)
-const taks = reactive<TaskModelProps[]>([])
+const tasks = reactive<TaskModelProps[]>([])
 
-const eventsStore = useEventsStore()
-const { events } = eventsStore
+const store = useEventsStore()
+const { events, loading } = storeToRefs(store)
+
 const focus = (taskTpe: string) => (task.value === taskTpe) ? 'bg-gray-300' : ''
 
-watch(task, (newValue) => {
-    taks.length = 0;
-    if (newValue === TaskType.TODOS) {
-        events.forEach((event: TaskModelProps) => {
-            taks.push(event);
+watchEffect(() => {
+    tasks.length = 0;
+    if (task.value === TaskType.TODOS) {
+        events.value.forEach((event: TaskModelProps) => {
+            tasks.push(event);
         });
     }
-    if (newValue !== TaskType.TODOS) {
-        eventsStore.getEventsByType(newValue).forEach((event: TaskModelProps) => {
-            taks.push(event);
+    if (task.value !== TaskType.TODOS) {
+        store.getEventsByType(task.value).forEach((event: TaskModelProps) => {
+            tasks.push(event);
         });
     }
 });
 
-onMounted(() => {
-    events.forEach((event: TaskModelProps) => {
-        taks.push(event);
-    });
-});
 </script>
 <template>
     <headerNav />
-
-    <div class="pt-20">
+    <div class="pt-20" :class="{ 'opacity-15': loading, 'pointer-events-none': loading }">
+        <slot name="error"></slot>
         <div class="flex items-center justify-start mx-2">
             <h1 class="text-2xl font-bold text-blue-600">Mis tareas</h1>
         </div>
@@ -53,17 +48,17 @@ onMounted(() => {
             transition duration-300 ease-in-out" type="button" @click="task = TaskType.EVENTO"
                 :class="focus(TaskType.EVENTO)">{{ TaskType.EVENTO }}</button>
         </div>
-        <div class="flex flex-col items-center justify-center gap-2 mt-4">
+        <div class="flex flex-row mx-2 items-center justify-center gap-2 mt-4" v-if="!loading">
             <!-- Contenedor dicinedo si no hay tareas o eventos -->
-            <div v-if="taks.length === 0" class="flex flex-col items-center justify-center gap-2">
+            <div v-if="tasks.length === 0" class="flex flex-col items-center justify-center gap-2">
                 <!-- Mensaje diciendo que no se ha encontrado datos -->
                 <p class="text-gray-500 font-medium">No se han encontrado {{ (task !== TaskType.TODOS) ? task.toLowerCase()
                     : 'datos' }}</p>
             </div>
-            <itemTask v-for="task in taks" :task="task" :date="(transformStringToDateObject(task.date))" :key="task.uid" />
+            <itemTask v-for="task in tasks" :task="task" :date="(transformStringToDateObject(task.date))" :key="task.uid" />
         </div>
-
     </div>
+    <slot name="loading"></slot>
 </template>
 
 <style scoped></style>
