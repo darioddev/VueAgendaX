@@ -2,7 +2,7 @@
 import useEvents from '@/composables/useEvents';
 import loaderComponent from '@/components/loaderComponent.vue';
 import messageError from '@/components/messageError.vue';
-const { isLoading, isError } = useEvents()
+const { isLoading, isError } = useEvents({ fetchOnMount: true})
 import '@/index.css'
 </script>
 

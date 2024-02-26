@@ -21,8 +21,6 @@ watch(() => props.isError, (newValue: boolean) => {
         toggleModalState()
     }
 })
-
-
 </script>
 
 <template>

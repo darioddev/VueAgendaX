@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import taskModal from '@/components/taskModal.vue';
+import type { TaskModelProps } from '@/interfaces/taskModelProps';
+
 import useModal from '@/composables/useModal';
+import { ref} from 'vue'
 import type { taskModalProps } from '@/interfaces/taskModalProps'
-import { watch } from 'vue'
 const props = defineProps<taskModalProps>()
+const task = ref<TaskModelProps>(JSON.parse(JSON.stringify(props.task)))
+
 const {
     showModal: modalState,
     toggleModalState
@@ -14,7 +18,6 @@ const transerIDForDrag = (event: DragEvent) => {
         event.dataTransfer?.setData('text/plain', props.task.id.toString() as string)
     }
 }
-
 </script>
 
 <template>
@@ -27,7 +30,7 @@ const transerIDForDrag = (event: DragEvent) => {
         <p class="pl-2 text-md">{{ props.task?.title }}</p>
         <slot></slot>
     </div>
-    <taskModal :showModal="modalState" :date="props.date" :task="props.task" @update:showModal="toggleModalState" />
+    <taskModal :showModal="modalState" :date="props.date" :task="task" @update:showModal="toggleModalState" />
 </template>
 
 <style lang="css" scoped></style>

@@ -6,13 +6,10 @@ const useEventsStore = defineStore('events', () => {
   const events = reactive<TaskModelProps[]>([])
   const loading = ref<boolean | null>(false)
   const err = ref<boolean>(false)
-  const refetchEvents = ref<() => void>((): void => {})
-  
   return {
     events,
     err,
     loading,
-    refetchEvents,
     filterForDate(dte: string): Array<TaskModelProps> {
       return events.filter((event) => event.date === dte)
     },
@@ -24,9 +21,6 @@ const useEventsStore = defineStore('events', () => {
     },
     setEvents(newEvents: Array<TaskModelProps>): void {
       events.splice(0, events.length, ...newEvents)
-    },
-    setRefetchEvents(refetch: () => void): void {
-      refetchEvents.value = refetch
     }
   }
 })

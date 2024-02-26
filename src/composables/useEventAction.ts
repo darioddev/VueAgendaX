@@ -29,6 +29,7 @@ const useEventAction = () => {
 
   const updateEvent = async ( event: TaskModelProps, close: (() => void) | null = null, message = '¿Estás seguro de que quieres actualizar este evento?' ): Promise<void> => {
     try {
+      if (!event.title.trim()) event.title = '(Sin título)'
       if (confirm(message)) {
         await mutateAsync(() =>
           patchEvent({

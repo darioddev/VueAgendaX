@@ -111,9 +111,10 @@ watch(() => props.date, (value: Date) => {
 });
 
 
+
 watch(() => props.task, (value: TaskModelProps | undefined) => {
     if (value) {
-        task.value = JSON.parse(JSON.stringify(value))
+        task.value = value
     }
 }, { immediate: true, })
 
@@ -124,7 +125,6 @@ watch(() => props.showModal, async (value: boolean) => {
         inputTitleEvent.value?.focus(); // Enfoco el input
     }    // Si no hay un id, reseteo los valores , esto es por que el id nos la proporciona el servidor , y si no hay id es por que es un nuevo evento
     if (!task.value?.id) resetValues()
-
 })
 
 </script>

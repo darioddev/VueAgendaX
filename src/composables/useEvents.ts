@@ -5,16 +5,16 @@ import { watch, type Ref, watchEffect } from 'vue'
 import { storeToRefs } from 'pinia'
 import type { TaskModelProps } from '@/interfaces/taskModelProps'
 
-const useEvents = (): any => {
+const useEvents = (option : object): any => {
   const store = useEventsStore()
   const { events, loading, err } = storeToRefs(store)
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['events'],
-    queryFn: getEvents,
-    refetchOnReconnect: true,
-    refetchOnMount: true,
-    staleTime: 5000
+    queryKey: ['events'], // Nombre de la query
+    queryFn: getEvents, // Función que realiza la petición
+    staleTime: 5000,
+    retry: 3,
+    ...option
   })
   watch(
     data as Ref,
@@ -30,7 +30,6 @@ const useEvents = (): any => {
       err.value = true
     }
     loading.value = isLoading.value
-    store.setRefetchEvents(refetch)
   })
 
   return {
