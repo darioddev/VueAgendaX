@@ -15,9 +15,7 @@ coverage
 *.local
 
 
-*otrasformas*
-*db*
-*.json*
+
 
 /cypress/videos/
 /cypress/screenshots/
