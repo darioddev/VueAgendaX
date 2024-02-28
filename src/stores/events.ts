@@ -21,6 +21,16 @@ const useEventsStore = defineStore('events', () => {
     },
     setEvents(newEvents: Array<TaskModelProps>): void {
       events.splice(0, events.length, ...newEvents)
+    },
+    orderBY(order: keyof TaskModelProps, asc: boolean = true): TaskModelProps[] {
+      return events.sort((a: TaskModelProps, b: TaskModelProps) => {
+        const dateA = (a[order] as string) || ''
+        const dateB = (b[order] as string) || ''
+        if (asc) {
+          return dateA.localeCompare(dateB)
+        }
+        return dateB.localeCompare(dateA)
+      })
     }
   }
 })

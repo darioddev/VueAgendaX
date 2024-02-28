@@ -22,26 +22,25 @@ const {
 
 const emit = defineEmits(['update:showModal'])
 const closeModal = () => emit('update:showModal', !showModal.value)
-const task = ref<TaskModelProps>(
-    {
-        type: TaskType.EVENTO,
-        title: '',
-        date: props.date.toLocaleDateString(),
-        star: {
-            date: getFormatDateParam(props.date),
-            time: getTimeFormat(new Date().getHours() + 1),
-            allDay: false
-        },
-        end: {
-            date: getFormatDateParam(props.date),
-            time: getTimeFormat(new Date().getHours() + 2) || '00:00'
-        },
-        color: {
-            background: generateColor(),
-            text: '#000000'
-        },
-        description: ''
-    })
+const task = ref<TaskModelProps>(props.task ?? {
+    type: TaskType.EVENTO,
+    title: '',
+    date: props.date.toLocaleDateString(),
+    star: {
+        date: getFormatDateParam(props.date),
+        time: getTimeFormat(new Date().getHours() + 1),
+        allDay: false
+    },
+    end: {
+        date: getFormatDateParam(props.date),
+        time: getTimeFormat(new Date().getHours() + 2) || '00:00'
+    },
+    color: {
+        background: generateColor(),
+        text: '#000000'
+    },
+    description: ''
+})
 
 const focusEvent = (typeEvent: string) => task.value.type.toLowerCase() === typeEvent.toLowerCase() ? 'bg-gray-200' : ''
 
@@ -111,22 +110,30 @@ watch(() => props.date, (value: Date) => {
 });
 
 
-
-watch(() => props.task, (value: TaskModelProps | undefined) => {
-    if (value) {
-        task.value = value
-    }
-}, { immediate: true, })
-
 watch(() => props.showModal, async (value: boolean) => {
     showModal.value = value // Actualizo el valor de la variable reactiva showModal con el valor de la prop showModal
     if (value) { // Si es verdadero , el modal se muestra
         await nextTick(); // Espera a que el DOM se actualice para enfocar el input
         inputTitleEvent.value?.focus(); // Enfoco el input
-    }    // Si no hay un id, reseteo los valores , esto es por que el id nos la proporciona el servidor , y si no hay id es por que es un nuevo evento
+    }
+    // Si no hay un id, reseteo los valores , esto es por que el id nos la proporciona el servidor , y si no hay id es por que es un nuevo evento
     if (!task.value?.id) resetValues()
+    // Si hay un id , busco la tarea por el id y la asigno a la variable reactiva task , esto es por que el id nos la proporciona el servidor
+    // Esto sirve para cuando el usuario si entra al modal cambia los parametros de la tarea y luego cierra el modal,
+    // Y no ha guardado los cambios , al volver a abrir el modal , se vuelve a asignar los valores de la tarea
+    if (task.value?.id) task.value = props.task as TaskModelProps
+
 })
 
+
+
+/*
+watch(() => props.task, (value: TaskModelProps | undefined) => {
+    if (value) {
+        task.value = value
+    }
+}, { immediate: true, })
+*/
 </script>
 <template>
     <div id="crud-modal" tabindex="-1" aria-hidden="true"
@@ -283,7 +290,7 @@ watch(() => props.showModal, async (value: boolean) => {
                         </button>
                         <button type="button" v-if="task.id"
                             class="bg-red-500 text-white text-sm font-medium rounded-lg px-3 py-1 hover:bg-red-700 transition duration-300 ease-in-out"
-                            @click="handleRemoveEvent( task?.id as number, closeModal)" title="Borrar evento">
+                            @click="handleRemoveEvent(task?.id as number, closeModal)" title="Borrar evento">
                             <i class='bx bxs-trash'></i>
                         </button>
                     </div>

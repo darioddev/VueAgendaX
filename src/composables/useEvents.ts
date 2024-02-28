@@ -5,7 +5,7 @@ import { watch, type Ref, watchEffect } from 'vue'
 import { storeToRefs } from 'pinia'
 import type { TaskModelProps } from '@/interfaces/taskModelProps'
 
-const useEvents = (option : object): any => {
+const useEvents = (option: object): any => {
   const store = useEventsStore()
   const { events, loading, err } = storeToRefs(store)
 
@@ -14,10 +14,14 @@ const useEvents = (option : object): any => {
     queryFn: getEvents, // Función que realiza la petición
     staleTime: 5000,
     retry: 3,
+    enabled: true, // Habilitar la petición
+    refetchOnWindowFocus: false, // No recargar la data al enfocar la ventana
     ...option
   })
+  //Observe changes in the data
+
   watch(
-    data as Ref,
+    data as any,
     (newData: Array<TaskModelProps>) => {
       if (newData) {
         store.setEvents(newData)
@@ -29,6 +33,7 @@ const useEvents = (option : object): any => {
     if (isError.value) {
       err.value = true
     }
+
     loading.value = isLoading.value
   })
 

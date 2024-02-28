@@ -4,4 +4,5 @@ export interface taskModalProps {
   showModal?: boolean
   date: Date
   task?: TaskModelProps
+  personalized?: boolean
 }
