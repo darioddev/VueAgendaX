@@ -21,7 +21,7 @@ const useEvents = (option: object): any => {
   //Observe changes in the data
 
   watch(
-    data as any,
+    data as Ref,
     (newData: Array<TaskModelProps>) => {
       if (newData) {
         store.setEvents(newData)

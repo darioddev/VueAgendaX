@@ -2,7 +2,7 @@
 import taskModal from '@/components/taskModal.vue';
 import useModal from '@/composables/useModal';
 import type { taskModalProps } from '@/interfaces/taskModalProps'
-import { transformDateToDateInfo, getFormatDateParam } from '@/utils/date'
+import {getFormatDateParam } from '@/utils/date'
 //import type { TaskModelProps } from '@/interfaces/taskModelProps';
 //import { ref} from 'vue'
 //const task = ref<TaskModelProps>(JSON.parse(JSON.stringify(props.task)))
@@ -22,7 +22,7 @@ const transerIDForDrag = (event: DragEvent) => {
 </script>
 
 <template>
-    <div class=" my-1 rounded-lg flex flex-col  justify-start shadow-md transition duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:scale-105"
+    <div class="w-full my-1 rounded-lg flex flex-col  justify-start shadow-md transition duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:scale-105"
         :style="{
             backgroundColor: props.task?.color.background,
             color: props.task?.color.text
