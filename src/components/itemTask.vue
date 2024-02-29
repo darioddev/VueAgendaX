@@ -2,7 +2,7 @@
 import taskModal from '@/components/taskModal.vue';
 import useModal from '@/composables/useModal';
 import type { taskModalProps } from '@/interfaces/taskModalProps'
-import {getFormatDateParam } from '@/utils/date'
+import { getFormatDateParam } from '@/utils/date'
 //import type { TaskModelProps } from '@/interfaces/taskModelProps';
 //import { ref} from 'vue'
 //const task = ref<TaskModelProps>(JSON.parse(JSON.stringify(props.task)))
@@ -33,8 +33,8 @@ const transerIDForDrag = (event: DragEvent) => {
             <p class="text-xs font-semibold">{{ props.task?.id }}</p>
         </div>
         <div v-else class="pl-2 flex flex-row items-center justify-start">
-            <i class='bx bx-task pl-2'></i>
-            <p class="pl-2 text-md">{{ props.task?.title }}</p>
+            <p class="text-sm font-semibold">{{ props.task?.star.time }}</p>
+            <p class="pl-2 text-sm">{{ props.task?.title }}</p>
         </div>
         <div class="flex flex-col items-start justify-start p-2 text-black font-semibold flex-wrap"
             v-if="props.personalized">

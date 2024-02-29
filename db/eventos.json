@@ -2,15 +2,15 @@
   "eventos": [
     {
       "type": "Evento",
-      "title": "de",
-      "date": "22/2/2024",
+      "title": "(Sin título)",
+      "date": "15/2/2024",
       "star": {
-        "date": "2024-02-22",
+        "date": "2024-02-15",
         "time": "13:30",
         "allDay": false
       },
       "end": {
-        "date": "2024-02-22",
+        "date": "2024-02-15",
         "time": "14:30"
       },
       "color": {
@@ -21,7 +21,7 @@
       "dateCreated": "2024-02-26T11:55:16.077Z",
       "uid": "c5ed5ab3edd64cd98b89f95051bdb74a",
       "id": 28,
-      "dateModified": "2024-02-27T12:10:14.972Z"
+      "dateModified": "2024-02-29T10:53:10.417Z"
     },
     {
       "type": "Evento",
@@ -140,15 +140,15 @@
     },
     {
       "type": "Evento",
-      "title": "a25",
-      "date": "1/2/2024",
+      "title": "a258",
+      "date": "5/2/2024",
       "star": {
-        "date": "2024-02-01",
+        "date": "2024-02-05",
         "time": "23:55",
         "allDay": false
       },
       "end": {
-        "date": "2024-02-01",
+        "date": "2024-02-05",
         "time": "11:30"
       },
       "color": {
@@ -159,7 +159,30 @@
       "dateCreated": "2024-02-27T08:47:46.727Z",
       "uid": "5f883475f4054c978872b4b95365b1b7",
       "id": 35,
-      "dateModified": "2024-02-28T11:42:27.374Z"
+      "dateModified": "2024-02-29T10:51:52.763Z"
+    },
+    {
+      "type": "Evento",
+      "title": "da",
+      "date": "12/2/2024",
+      "star": {
+        "date": "2024-02-12",
+        "time": "18:30",
+        "allDay": false
+      },
+      "end": {
+        "date": "2024-02-12",
+        "time": "19:30"
+      },
+      "color": {
+        "background": "#e29708",
+        "text": "#000000"
+      },
+      "description": "",
+      "dateCreated": "2024-02-28T16:16:50.495Z",
+      "uid": "273fdccf0bd94de8b6b22b7be2e371a3",
+      "id": 36,
+      "dateModified": "2024-02-29T09:51:06.326Z"
     }
   ]
 }

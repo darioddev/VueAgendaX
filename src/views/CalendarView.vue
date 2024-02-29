@@ -10,7 +10,8 @@ import headerNav from '@/components/headerNav.vue';
     <div class="pt-20">
         <headerNav />
         <slot name="error"></slot>
-        <calendarMonth>
+        <calendarMonth
+        >
             <template v-slot:loading>
                 <slot name="loading"></slot>
             </template>

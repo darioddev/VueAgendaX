@@ -16,6 +16,12 @@ const { showModal, toggleModalState } = useModal()
 const { deleteEvent: handleRemoveEvent } = useEventAction()
 const { loading } = storeToRefs(useEventsStore())
 
+interface objectOptions {
+    text: string,
+    start: number,
+    end: number
+}
+
 const props = withDefaults(defineProps<CalendarProps>(), {
     daysOfWeek: () => import.meta.env.VITE_DAYS_OF_WEEK_DEFAULT.split(',') as Array<string>,
     cols: Number(import.meta.env.VITE_CALENDAR_COLS_DEFAULT) as number,
@@ -23,24 +29,45 @@ const props = withDefaults(defineProps<CalendarProps>(), {
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1
 })
-const date = ref<Date>(new Date(props.year, props.month - 1))
 const tablamonth = ref<string[][]>([])
 
+const date = ref<Date>(new Date(props.year, props.month - 1))
+
+//
+const ncols = ref<number[]>(createArray(props.cols as number))
+const selectedOption = ref<number>(0)
+//
+
 const anadevalorSecuencial = (numero: number, valor: string, celdas: string[][]) => {
-    const fila = Math.floor(numero / props.cols);
-    const columna = numero % props.cols;
+    const fila = Math.floor(numero / props.daysOfWeek.length);
+    const columna = numero % props.daysOfWeek.length;
     celdas[fila][columna] = valor;
 }
 
 const calcularTablamonth = () => {
-    const celdas: string[][] = Array.from(Array(props.cols).keys()).map(() => Array.from(Array(props.rows).keys()).map(() => ''))
+    const celdas: string[][] = Array.from(Array(props.daysOfWeek.length).keys()).map(() => Array.from(Array(props.rows).keys()).map(() => ''))
     const primerDia: Date = new Date(`${date.value.getFullYear()}-${date.value.getMonth() + 1}-01`)
     const posicionPrimerDia = transformArrayStringToNumber(import.meta.env.VITE_INDEX_FOR_DAY_DEFAULT as string)[primerDia.getDay()]
     const numDiasmonth: number = new Date(date.value.getFullYear(), date.value.getMonth() + 1, 0).getDate()
-    const rangoNumeros: Array<number> = createArray(numDiasmonth).map(i => i + posicionPrimerDia)
+    const rangoNumeros: Array<number> = createArray(numDiasmonth).map(i => i + posicionPrimerDia || 0)
     rangoNumeros.map((el, index): void => anadevalorSecuencial(el, new Date(date.value.getFullYear(), date.value.getMonth(), (index + 1)).toLocaleDateString(), celdas))
     tablamonth.value = celdas
 }
+
+//
+const selectOptions: Array<objectOptions> = [
+    { text: 'Todos los dias', start: 0, end: props.daysOfWeek.length },
+    { text: 'Lunes a viernes', start: 0, end: 5 },
+    { text: 'Fines de semana', start: 5, end: props.daysOfWeek.length },
+    { text: '3 primeros dias', start: 0, end: 3 },
+    { text: '3 ultimos dias', start: props.daysOfWeek.length - 3, end: props.daysOfWeek.length }
+]
+
+const handleSelect = () => {
+    const { start, end } = selectOptions[selectedOption.value]
+    ncols.value = createArray(props.daysOfWeek.length).slice(start, end)
+}
+//
 
 
 watchEffect(
@@ -56,7 +83,8 @@ const focusDayToday = (day: string): string => day === new Date().toLocaleDateSt
 </script>
 
 <template>
-    <div class="flex justify-between items-center px-4 mb-2" :class="{ 'opacity-20': loading, 'pointer-events-none': loading }">
+    <div class="flex justify-between items-center px-4 mb-2"
+        :class="{ 'opacity-20': loading, 'pointer-events-none': loading }">
         <div class="flex items-center"> <!-- Este div contiene los botones de navegación -->
             <button @click="dayToday"
                 class="p-1 py-2 text-black rounded-lg flex items-center justify-center shadow-md transition duration-300 ease-in-out border border-gray-500 hover:bg-blue-700 hover:text-white"
@@ -83,6 +111,13 @@ const focusDayToday = (day: string): string => day === new Date().toLocaleDateSt
         </div>
         <div class="flex items-center">
             <div class="flex flex-row ml-auto">
+                <select class="w-36 px-2 py-1 text-gray-600 font-medium  bg-gray-100 hover:bg-gray-300 transition duration-300 ease-in-out mr-2
+                    cursor-pointer rounded-lg" v-model="selectedOption" @change="handleSelect"
+                    title="Seleccionar dias a mostrar">
+                    <option disabled>Mostrar por dias especificos...</option>
+                    <option v-for="(option, index) in selectOptions" :key="index" :value="index"> {{ option.text }}
+                    </option>
+                </select>
                 <button
                     class="bg-blue-500 px-2 mr-1 rounded-full text-black shadow-md hover:bg-blue-700 transition duration-300 ease-in-out hover:text-white"
                     title="Agregar tarea" @click="toggleModalState">
@@ -104,19 +139,18 @@ const focusDayToday = (day: string): string => day === new Date().toLocaleDateSt
             <thead>
                 <tr>
                     <th></th>
-                    <th v-for="c in daysOfWeek" :key="c"
-                        class="text-center border border-gray-400 border-b-0 text-black h-8">
-                        {{ c }}
+                    <th v-for="c in ncols " :key="c" class="text-center border border-gray-400 border-b-0 text-black h-8">
+                        {{ daysOfWeek[c] }}
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="i in props.rows" :key="i">
                     <th></th>
-                    <td v-for="(c, j) in daysOfWeek" :key="c"
+                    <td v-for="(c) in ncols" :key="c"
                         class="text-center border border-gray-400 border-t-0 text-black cursor-pointer hover:bg-blue-200 transition duration-300 ease-in-out"
-                        :class="focusDayToday(tablamonth[i - 1][j])">
-                        <ceillCalendar v-if="tablamonth[i - 1][j]" :fecha="tablamonth[i - 1][j]" />
+                        :class="focusDayToday(tablamonth[i - 1][c])">
+                        <ceillCalendar v-if="tablamonth[i - 1][c]" :fecha="tablamonth[i - 1][c]" />
                     </td>
                 </tr>
             </tbody>

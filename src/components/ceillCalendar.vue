@@ -36,10 +36,8 @@ const tasks = ref<Array<TaskModelProps>>([])
 const updateForDate = async (event: DragEvent) => {
     // Obtengo el id de la tarea , mediante el evento de arrastrar y soltar 
     const id: number = Number(event.dataTransfer?.getData('text/plain'))
-    console.log(id)
     // Busco la tarea por el id , si existe y la fecha de la tarea es diferente a la fecha actual , preguntar si desea mover la tarea a la fecha actual
     const task = getEventById(id as number) as TaskModelProps
-    console.log(task)
     // Si la tarea existe y la fecha de la tarea es diferente a la fecha actual , preguntar si desea mover la tarea a la fecha actual
     if (task && task.date !== dateProps.value.toLocaleDateString()) {
         await handleUpdateEvent({
@@ -75,7 +73,7 @@ watchEffect(() => {
         <div class="
             w-full
             my-2
-            text-end" title="Agregar tarea">
+            text-end">
             <button
                 class="bg-blue-500 px-1 mr-1 rounded-full text-black shadow-md hover:bg-blue-700 transition duration-300 ease-in-out hover:text-white"
                 title="Agregar tarea">
