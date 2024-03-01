@@ -22,8 +22,8 @@ const transerIDForDrag = (event: DragEvent) => {
 </script>
 
 <template>
-    <div class="w-full my-1 rounded-lg flex flex-col  justify-start shadow-md transition duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:scale-105"
-        :style="{
+    <div class="my-1 rounded-lg flex flex-col  justify-start shadow-md transition duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:scale-105"
+        :class="{ 'w-full': !props.personalized }" :style="{
             backgroundColor: props.task?.color.background,
             color: props.task?.color.text
         }" @click="toggleModalState" :draggable="true" @dragstart="transerIDForDrag">
@@ -33,7 +33,7 @@ const transerIDForDrag = (event: DragEvent) => {
             <p class="text-xs font-semibold">{{ props.task?.id }}</p>
         </div>
         <div v-else class="pl-2 flex flex-row items-center justify-start">
-            <p class="text-sm font-semibold">{{ props.task?.star.time }}</p>
+            <p class="text-sm font-semibold" v-if="!props.task?.star.allDay">{{ props.task?.star.time }}</p>
             <p class="pl-2 text-sm">{{ props.task?.title }}</p>
         </div>
         <div class="flex flex-col items-start justify-start p-2 text-black font-semibold flex-wrap"
@@ -46,7 +46,8 @@ const transerIDForDrag = (event: DragEvent) => {
             <p class="text-xs font-light">Fin: {{ getFormatDateParam(new Date(props.task?.end?.date as string)) }},{{
                 props.task?.end.time }}</p>
             <p class="text-xs font-light">
-                Ultima modificacion: {{ getFormatDateParam(new Date(props.task?.dateModified as string)) }}
+                Ultima modificacion: {{ (props.task?.dateModified) ? getFormatDateParam(new Date(props.task?.dateModified as
+                    string)) : 'No se ha modificado' }}
             </p>
         </div>
     </div>

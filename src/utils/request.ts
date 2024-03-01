@@ -38,7 +38,7 @@ export const patchEvent = async (data: TaskModelProps): Promise<TaskModelProps> 
 }
 
 //Peticion put con axios
-export const put = async (url: string, data: object): Promise<TaskModelProps | null> => {
+export const put = async (url: string, data: object): Promise<TaskModelProps> => {
   try {
     const response = await axios.put(url, data)
     return response.data

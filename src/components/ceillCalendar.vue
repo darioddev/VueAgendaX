@@ -4,13 +4,13 @@ import useModal from '@/composables/useModal';
 import itemTask from '@/components/itemTask.vue';
 import useEventsStore from '@/stores/events';
 import useEventAction from '@/composables/useEventAction';
-
+import app from '@/api/api'
+import useMutationEvent from '@/composables/useMutate';
 import { useRouter } from 'vue-router';
 import type { TaskModelProps } from '@/interfaces/taskModelProps';
 import { transformStringToDateObject, getFormatDateParam, transformStringToDate } from '@/utils/date'
 import { transformArrayStringToNumber } from '@/utils/arrayString'
 import { ref, watchEffect } from 'vue'
-import { storeToRefs } from 'pinia';
 
 interface Props {
     fecha: string
@@ -25,8 +25,12 @@ const {
     updateEvent: handleUpdateEvent
 } = useEventAction()
 
+const {
+    mutateAsync
+} = useMutationEvent()
+
 const store = useEventsStore()
-const { filterForDate , getEventById } = store
+const { filterForDate, getEventById } = store
 
 
 const props = defineProps<Props>()
@@ -53,9 +57,10 @@ const updateForDate = async (event: DragEvent) => {
             }
         }, null, `¿Desea mover la tarea "${task.title}" a la fecha ${transformStringToDate(props.fecha)}?`)
     }
+
 }
 
-watchEffect(() => {
+watchEffect(async () => {
     dateProps.value = transformStringToDateObject(props.fecha)
     tasks.value = filterForDate(dateProps.value.toLocaleDateString())
 })

@@ -1,10 +1,18 @@
-import { ref } from 'vue'
+import { ref , type Ref} from 'vue'
 import type { TaskModelProps } from '@/interfaces/taskModelProps'
 import useMutationEvent from './useMutate'
 import { postEvent, patchEvent, removeEvent } from '@/utils/request' // Importa las funciones para crear y actualizar eventos
 import { generateUUID } from '@/utils/uuid'
 
-const useEventAction = () => {
+interface EventActionProps {
+  errorMessage: Ref<string>
+  submitEvent: (event: TaskModelProps, close: () => void) => Promise<void>
+  updateEvent: (event: TaskModelProps, close: (() => void) | null, message: string) => Promise<void>
+  isSuccessMutation: boolean
+  deleteEvent: (id: Number, close?: () => void) => Promise<void>
+}
+
+const useEventAction = () : EventActionProps => {
   const errorMessage = ref<string>('')
   const { isSuccess: isSuccessMutation, reset, mutateAsync } = useMutationEvent()
 

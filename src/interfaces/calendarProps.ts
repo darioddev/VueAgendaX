@@ -2,6 +2,6 @@ export interface CalendarProps {
   month?: number
   year?: number
   daysOfWeek?: string[]
-  cols?: number
+  cols?: number|number[]
   rows?: number
 }

@@ -7,7 +7,6 @@ const fullName: string = import.meta.env.VITE_FULL_NAME as string // Importamos 
 
 const backgroundClass = (ruta: string): string => route.currentRoute.value.path === ruta ? 'bg-blue-700' : ''
 const iconColor = (ruta: string): string => route.currentRoute.value.path === ruta ? 'text-white' : 'text-black'
-//const verifyRouteEvent = computed((): boolean => route.currentRoute.value.path !== '/eventos')
 
 
 </script>

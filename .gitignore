@@ -15,8 +15,8 @@ coverage
 *.local
 
 
-
-
+*recursosUtils*
+*CalendarViewProvide*
 /cypress/videos/
 /cypress/screenshots/
 
