@@ -1,29 +1,6 @@
 {
   "eventos": [
     {
-      "type": "Tarea",
-      "title": "(Sin título)",
-      "date": "16/2/2024",
-      "star": {
-        "date": "2024-02-16",
-        "time": "18:30",
-        "allDay": false
-      },
-      "end": {
-        "date": "2024-02-16",
-        "time": "19:30"
-      },
-      "color": {
-        "background": "#8af0ca",
-        "text": "#000000"
-      },
-      "description": "",
-      "dateCreated": "2024-02-29T16:41:48.969Z",
-      "uid": "b06e3fbab36847b0acaadb96a2f2e992",
-      "id": 3,
-      "dateModified": "2024-03-01T13:09:21.814Z"
-    },
-    {
       "type": "Evento",
       "title": "35",
       "date": "1/12/2023",
@@ -49,14 +26,14 @@
     {
       "type": "Evento",
       "title": "d",
-      "date": "4/4/2024",
+      "date": "8/5/2024",
       "star": {
-        "date": "2024-04-04",
+        "date": "2024-05-08",
         "time": "14:30",
         "allDay": false
       },
       "end": {
-        "date": "2024-04-04",
+        "date": "2024-05-08",
         "time": "15:30"
       },
       "color": {
@@ -67,7 +44,7 @@
       "dateCreated": "2024-03-01T12:52:32.805Z",
       "uid": "12ad3770c9fa40c5be2c3436ddbb0fda",
       "id": 6,
-      "dateModified": "2024-03-01T12:53:36.227Z"
+      "dateModified": "2024-03-03T11:13:14.335Z"
     },
     {
       "type": "Evento",
@@ -387,6 +364,52 @@
       "uid": "f7659d902c2e40d3b14017154e6e7f8b",
       "id": 21,
       "dateModified": "2024-03-03T00:13:15.975Z"
+    },
+    {
+      "type": "Evento",
+      "title": "d",
+      "date": "4/6/2025",
+      "star": {
+        "date": "2025-06-04",
+        "time": "12:30",
+        "allDay": false
+      },
+      "end": {
+        "date": "2025-06-04",
+        "time": "13:30"
+      },
+      "color": {
+        "background": "#16b91a",
+        "text": "#000000"
+      },
+      "description": "",
+      "dateCreated": "2024-03-03T10:53:29.397Z",
+      "uid": "d39d723826cd4c1484bd715b9d31e841",
+      "id": 22,
+      "dateModified": "2024-03-03T10:53:45.043Z"
+    },
+    {
+      "type": "Evento",
+      "title": "d",
+      "date": "6/3/2024",
+      "star": {
+        "date": "2024-03-06",
+        "time": "12:30",
+        "allDay": false
+      },
+      "end": {
+        "date": "2024-03-06",
+        "time": "13:30"
+      },
+      "color": {
+        "background": "#776d31",
+        "text": "#000000"
+      },
+      "description": "",
+      "dateCreated": "2024-03-03T10:56:12.168Z",
+      "uid": "5b9ab9873db54dbabb384d33df4ecf1f",
+      "id": 23,
+      "dateModified": "2024-03-03T11:02:41.177Z"
     }
   ]
 }

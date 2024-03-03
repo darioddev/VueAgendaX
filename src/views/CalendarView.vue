@@ -30,8 +30,8 @@ interface dayOfWeekProps {
 const { date, nextMonth, nextYear, monthCurrent, yearCurrent, dayToday } = useDate(new Date())
 const { showModal, toggleModalState } = useModal()
 const { deleteEvent: handleRemoveEvent } = useEventAction()
-
 const { loading } = storeToRefs(useEventsStore())
+
 const daysOfWeek: Array<String> = import.meta.env.VITE_DAYS_OF_WEEK_ES.split(',')
 const controlYear = () => {
     if (yearCurrent.value < 1900 || yearCurrent.value > 2100) {
@@ -111,6 +111,8 @@ watch(() => nmonths, (value) => {
 </script>
 
 <template>
+    <slot name="loading"></slot>
+
     <div class="pt-20">
         <headerNav />
         <div class="flex flex-row items-star justify-star  gap-2 w-full px-4">
@@ -162,10 +164,10 @@ watch(() => nmonths, (value) => {
                     <i class='bx bxs-chevron-right'></i>
                 </button>
                 <h3 class="text-4xl font-bold pb-1 text-blue-700 cursor-pointer">{{
-                capitalize(date.toLocaleString(`${daysOfWeeks.language}`,
+                    capitalize(date.toLocaleString(`${daysOfWeeks.language}`,
                     {
-                        month:
-                            'long'
+                    month:
+                    'long'
                     })) }}
                     {{ daysOfWeeks.language === 'es-ES' ? 'de' : 'of' }} {{ date.getFullYear() }}</h3>
             </div>
@@ -176,7 +178,7 @@ watch(() => nmonths, (value) => {
                         title="Seleccionar dias a mostrar">
                         <option disabled>Mostrar por dias especificos...</option>
                         <option v-for="(option, index) in selectOptions[daysOfWeeks.id]" :key="index" :value="index"> {{
-                option.text }}
+                            option.text }}
                         </option>
                     </select>
                     <button
@@ -194,14 +196,9 @@ watch(() => nmonths, (value) => {
             </div>
         </div>
         <slot name="error"></slot>
-        <calendarMonth 
-        :lang="daysOfWeeks.language" 
-        :month="monthCurrent" 
-        :year="yearCurrent" 
-        :cols="ncols"
-        :daysOfWeek="daysOfWeeks.days" 
-        @update:month="nextMonth"
-            />
+        <calendarMonth :lang="daysOfWeeks.language" :month="monthCurrent" :year="yearCurrent" :cols="ncols"
+            :daysOfWeek="daysOfWeeks.days" @update:month="nextMonth">
+        </calendarMonth>
         <!-- Contenedor que implica que estara en una fila solo 3 elementos de cada calendario
         <div class="flex flex-row flex-wrap gap-4">
             <calendarMonth v-for="month in Number(nmonths)" :key="month" :month="month" :year="yearCurrent" :cols="ncols">

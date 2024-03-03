@@ -47,8 +47,7 @@ const emit = defineEmits(['update:year', 'update:month'])
 
 let timeout: ReturnType<typeof setTimeout> | null = null;
 const nextMonthWithDelay = (event: DragEvent) => {
-    event.preventDefault()
-    const x = event.clientX
+        const x = event.clientX
 
     if ((x < 50 || x > window.innerWidth - 50) &&
         event.dataTransfer?.types.includes('text/plain')) {
@@ -84,7 +83,6 @@ const backgroundWeek = (c: number): { [key: string]: boolean } => {
 </script>
 
 <template>
-    <slot name="loading"></slot>
     <div class="flex flex-row justify-between items-center ml-4">
     <slot name="month"></slot>
     </div>
