@@ -4,4 +4,6 @@ export interface CalendarProps {
   daysOfWeek?: string[]
   cols?: number|number[]
   rows?: number
+  class?: string
+  lang?: string
 }

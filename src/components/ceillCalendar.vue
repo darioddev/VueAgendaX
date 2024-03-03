@@ -4,9 +4,6 @@ import useModal from '@/composables/useModal';
 import itemTask from '@/components/itemTask.vue';
 import useEventsStore from '@/stores/events';
 import useEventAction from '@/composables/useEventAction';
-import app from '@/api/api'
-import useMutationEvent from '@/composables/useMutate';
-import { useRouter } from 'vue-router';
 import type { TaskModelProps } from '@/interfaces/taskModelProps';
 import { transformStringToDateObject, getFormatDateParam, transformStringToDate } from '@/utils/date'
 import { transformArrayStringToNumber } from '@/utils/arrayString'
@@ -15,7 +12,6 @@ import { ref, watchEffect } from 'vue'
 interface Props {
     fecha: string
 }
-const redirect = useRouter()
 
 const {
     showModal: modalState,
@@ -25,9 +21,6 @@ const {
     updateEvent: handleUpdateEvent
 } = useEventAction()
 
-const {
-    mutateAsync
-} = useMutationEvent()
 
 const store = useEventsStore()
 const { filterForDate, getEventById } = store
@@ -84,12 +77,14 @@ watchEffect(async () => {
                 title="Agregar tarea">
                 <i class='bx bxs-calendar-plus' @click="toggleModalState"></i>
             </button>
-            <button
+            <!--
+                <button
                 class="bg-blue-300 px-1 mr-1 rounded-full text-black shadow-md hover:bg-blue-600 transition duration-300 ease-in-out hover:text-white"
                 :title="`Ver eventos y tareas del dia ${transformStringToDate(props.fecha)}`"
                 @click="redirect.push(`/day/${props.fecha.split('/').join('-')}`)">
                 <i class='bx bxs-calendar-star' @click="toggleModalState"></i>
             </button>
+        -->
         </div>
         <div>
         </div>

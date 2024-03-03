@@ -57,7 +57,7 @@ watchEffect(() => {
                 <p class="text-gray-500 font-medium">No se han encontrado {{ (task !== TaskType.TODOS) ? task.toLowerCase()
                     : 'datos' }}</p>
             </div>
-            <!-- Contenedor con Select de ordenacion -->
+            <!-- Contenedor con Select de ordenacion 
             <div class="flex flex-row items-center justify-start gap-2 w-full">
                 <select name="order" id="order"
                     class="px-2 py-1 text-gray-600 font-medium  bg-gray-100 hover:bg-gray-300 transition duration-300 ease-in-out"
@@ -71,11 +71,11 @@ watchEffect(() => {
                     <option :value="true">Ascendente</option>
                     <option :value="false">Descendente</option>
                 </select>
-                <!--Buscador con tailwind css-->
                 <input type="text" class="w-1/2 px-2 py-1 text-gray-600 font-medium  bg-gray-100 hover:bg-gray-200
                 transition duration-300 ease-in-out" placeholder="Buscar..." 
                 />
             </div>
+            -->
             <itemTask v-for="task in tasks" :task="task" :date="(transformStringToDateObject(task.date))" :key="task.uid"
                 :personalized="true">
             </itemTask>
