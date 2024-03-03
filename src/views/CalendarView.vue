@@ -8,7 +8,7 @@ import useModal from '@/composables/useModal';
 import useEventAction from '@/composables/useEventAction';
 import { transformDateToDateInfo } from '@/utils/date'
 import { capitalize, createArray } from '@/utils/arrayString'
-import { ref, watch, watchEffect } from 'vue'
+import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
 
